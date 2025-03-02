@@ -20,11 +20,17 @@ public class Solution {
             map.put(id, newValue);
         }
 
-        ArrayList<int[]> arrayList = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            arrayList.add(new int[]{entry.getKey(), entry.getValue()});
-        }
+//        ArrayList<int[]> arrayList = new ArrayList<>();
+//        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+//            arrayList.add(new int[]{entry.getKey(), entry.getValue()});
+//        }
+//
+//        return arrayList.toArray(new int[][]{});
 
-        return arrayList.toArray(new int[][]{});
+        return map.entrySet().stream()
+                .map(entry ->
+                        new int[]{entry.getKey(), entry.getValue()}
+                )
+                .toArray(int[][]::new);
     }
 }
