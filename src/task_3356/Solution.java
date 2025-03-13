@@ -1,35 +1,42 @@
 package task_3356;
 
-import java.util.Arrays;
-
 public class Solution {
     public int minZeroArray(int[] nums, int[][] queries) {
-        int[] maxValues = new int[nums.length];
+        int left = 0;
+        int right = queries.length;
 
-        if (Arrays.stream(nums).allMatch(val -> val == 0)) {
-            return 0;
-        }
+        if (!currentIndexZero(nums, queries, right)) return -1;
 
-        int k;
-        for (k = 0; k < queries.length; k++) {
-            int[] action = queries[k];
-            for (int i = action[0]; i <= action[1]; i++) {
-                maxValues[i] += action[2];
-            }
-
-            boolean finished = true;
-            for (int i = 0; i < nums.length; i++) {
-                if (maxValues[i] < nums[i]) {
-                    finished = false;
-                    break;
-                }
-            }
-
-            if (finished) {
-                break;
+        while (left <= right) {
+            int middle = left + (right - left) / 2;
+            if (currentIndexZero(nums, queries, middle)) {
+                right = middle - 1;
+            } else {
+                left = middle + 1;
             }
         }
 
-        return k == queries.length ? -1 : k + 1;
+        return left;
+    }
+
+    private boolean currentIndexZero(int[] nums, int[][] queries, int k) {
+        int n = nums.length;
+        int sum = 0;
+        int[] differenceArray = new int[n + 1];
+
+        for (int queryIndex = 0; queryIndex < k; queryIndex++) {
+            int left = queries[queryIndex][0];
+            int right = queries[queryIndex][1];
+            int val = queries[queryIndex][2];
+
+            differenceArray[left] += val;
+            differenceArray[right + 1] -= val;
+        }
+
+        for (int numIndex = 0; numIndex < n; numIndex++) {
+            sum += differenceArray[numIndex];
+            if (sum < nums[numIndex]) return false;
+        }
+        return true;
     }
 }
