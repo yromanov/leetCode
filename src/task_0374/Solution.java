@@ -1,0 +1,37 @@
+package task_0374;
+
+/**
+ * Forward declaration of guess API.
+ *
+ * @param num your guess
+ * @return -1 if num is higher than the picked number
+ * 1 if num is lower than the picked number
+ * otherwise return 0
+ * int guess(int num);
+ */
+
+class GuessGame {
+    int guess(int num) {
+        return 0;
+    }
+}
+
+public class Solution extends GuessGame {
+    public int guessNumber(int n) {
+        int left = 1;
+        int right = n;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int guessResult = guess(mid);
+            switch (guessResult) {
+                case 0 -> {
+                    return mid;
+                }
+                case 1 -> left = mid + 1;
+                case -1 -> right = mid - 1;
+            }
+        }
+        return -1;
+    }
+}
